@@ -1,0 +1,81 @@
+// src/components/manual/Checklist.module.scss
+@use '@/styles/mixins' as *;
+
+.container {
+    background-color: #f8f9fa;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+}
+
+.title {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: 1.125rem;
+    margin-bottom: var(--spacing-md);
+    color: var(--text-primary);
+}
+
+.icon {
+    color: var(--success-color);
+}
+
+.list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.item {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    transition: all 0.2s;
+
+    &:hover {
+        border-color: var(--primary-color);
+    }
+
+    &.checked {
+        background-color: #e6fcf5;
+        border-color: var(--success-color);
+
+        .text {
+            color: var(--text-secondary);
+            // text-decoration: line-through; 
+        }
+    }
+}
+
+.label {
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-md);
+    cursor: pointer;
+    width: 100%;
+}
+
+.checkbox {
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-right: var(--spacing-md);
+    cursor: pointer;
+}
+
+.text {
+    flex: 1;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.requiredBadge {
+    font-size: 0.75rem;
+    background-color: var(--danger-color);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: var(--spacing-sm);
+}

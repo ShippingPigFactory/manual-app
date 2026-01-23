@@ -1,0 +1,89 @@
+// src/app/page.module.scss
+@use '@/styles/mixins' as *;
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+    min-height: calc(100vh - 64px); // Header height setup
+}
+
+.hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-xl) 0;
+    margin-bottom: var(--spacing-xl);
+    text-align: center;
+}
+
+.heroTitle {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-md);
+    color: var(--text-primary);
+
+    @include mq('md') {
+        font-size: 2.5rem;
+    }
+}
+
+.heroSearch {
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: var(--spacing-md);
+}
+
+.tagsWrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    max-width: 600px;
+}
+
+.tagTitle {
+    width: 100%;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+}
+
+.tagChip {
+    background-color: #e9ecef;
+    color: var(--text-primary);
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 0.875rem;
+    transition: background-color 0.2s;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #dee2e6;
+    }
+}
+
+.sectionTitle {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+
+    @include mq('sm') {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include mq('lg') {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}

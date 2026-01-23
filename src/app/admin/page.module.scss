@@ -1,0 +1,242 @@
+// src/app/admin/page.module.scss
+@use '@/styles/mixins' as *;
+
+.container {
+    display: flex;
+    height: calc(100vh - 64px);
+    overflow: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background-color: #f8f9fa;
+    border-right: 1px solid var(--border-color);
+    padding: var(--spacing-md);
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebarTitle {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-md);
+    font-weight: 600;
+}
+
+.tree {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.treeItem {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 0.875rem;
+    color: var(--text-primary);
+    transition: background-color 0.1s;
+
+    &:hover {
+        background-color: #e9ecef;
+    }
+
+    &.active {
+        background-color: rgba(0, 86, 179, 0.1);
+        color: var(--primary-color);
+        font-weight: 500;
+
+        .icon {
+            color: var(--primary-color);
+        }
+    }
+}
+
+.icon {
+    color: var(--text-secondary);
+}
+
+.addButton {
+    margin-top: var(--spacing-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    width: 100%;
+    padding: var(--spacing-sm);
+    border: 1px dashed var(--border-color);
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+
+    &:hover {
+        border-color: var(--primary-color);
+        color: var(--primary-color);
+    }
+}
+
+/* Main Area */
+.main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: var(--spacing-lg);
+    overflow-y: auto;
+}
+
+.editorHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.editorTitle {
+    font-size: 1.5rem;
+}
+
+.saveButton {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 8px 16px;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+
+    &:hover {
+        background-color: var(--primary-hover);
+    }
+}
+
+.columns {
+    display: flex;
+    gap: var(--spacing-xl);
+    height: 100%;
+}
+
+/* Step List Column */
+.stepListColumn {
+    flex: 1;
+    max-width: 400px;
+    border-right: 1px solid var(--border-color);
+    padding-right: var(--spacing-lg);
+}
+
+.colTitle {
+    font-size: 1rem;
+    margin-bottom: var(--spacing-md);
+    color: var(--text-secondary);
+}
+
+.stepList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.stepItem {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm);
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+
+    &:hover {
+        border-color: var(--primary-color);
+    }
+}
+
+.dragHandle {
+    color: #adb5bd;
+    cursor: grab;
+}
+
+.stepContent {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.stepOrder {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.stepTitle {
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.addStepItem {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm);
+    border: 1px dashed var(--border-color);
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    cursor: pointer;
+    margin-top: var(--spacing-sm);
+}
+
+/* Form Column */
+.formColumn {
+    flex: 1;
+    max-width: 500px;
+}
+
+.formGroup {
+    margin-bottom: var(--spacing-lg);
+
+    label {
+        display: block;
+        margin-bottom: var(--spacing-xs);
+        font-weight: 500;
+        font-size: 0.875rem;
+    }
+}
+
+.input,
+.textarea {
+    width: 100%;
+    padding: var(--spacing-sm);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-size: 1rem;
+
+    &:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 2px rgba(0, 86, 179, 0.1);
+    }
+}
+
+.textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.badge {
+    display: inline-block;
+    background-color: var(--danger-color);
+    color: white;
+    font-size: 0.7rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+.helpText {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-xs);
+}
