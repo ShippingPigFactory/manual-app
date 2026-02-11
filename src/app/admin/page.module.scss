@@ -1,4 +1,3 @@
-// src/app/admin/page.module.scss
 @use '@/styles/mixins' as *;
 
 .container {
@@ -121,9 +120,11 @@
 /* Step List Column */
 .stepListColumn {
     flex: 1;
-    max-width: 400px;
+    max-width: 500px;
+    /* Increased for block editor */
     border-right: 1px solid var(--border-color);
     padding-right: var(--spacing-lg);
+    overflow-y: auto;
 }
 
 .colTitle {
@@ -138,23 +139,43 @@
     gap: var(--spacing-xs);
 }
 
+.stepItemWrapper {
+    background-color: white;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--spacing-sm);
+    overflow: hidden;
+}
+
 .stepItem {
     display: flex;
     align-items: center;
-    gap: var(--spacing-sm);
-    padding: var(--spacing-sm);
-    background-color: var(--surface-color);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-sm);
-
-    &:hover {
-        border-color: var(--primary-color);
-    }
+    padding: var(--spacing-sm) var(--spacing-md);
+    background-color: #f8f9fa;
+    border-bottom: 1px solid var(--border-color);
 }
 
-.dragHandle {
-    color: #adb5bd;
-    cursor: grab;
+.stepControls {
+    display: flex;
+    flex-direction: column;
+    margin-right: var(--spacing-sm);
+
+    button {
+        background: none;
+        border: none;
+        color: var(--text-secondary);
+        cursor: pointer;
+        padding: 2px;
+
+        &:hover:not(:disabled) {
+            color: var(--primary-color);
+        }
+
+        &:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+    }
 }
 
 .stepContent {
@@ -166,11 +187,209 @@
 .stepOrder {
     font-size: 0.75rem;
     color: var(--text-secondary);
+    margin-bottom: 2px;
 }
 
-.stepTitle {
-    font-size: 0.875rem;
+.stepTitleInput {
+    font-size: 0.9rem;
     font-weight: 500;
+    width: 100%;
+    border: 1px solid transparent;
+    background: transparent;
+    padding: 2px;
+
+    &:focus {
+        border-color: var(--primary-color);
+        background: white;
+    }
+}
+
+.deleteButton {
+    background: none;
+    border: none;
+    color: #dc3545; // Danger color
+    cursor: pointer;
+    padding: 4px;
+    margin-left: var(--spacing-sm);
+    opacity: 0.6;
+
+    &:hover {
+        opacity: 1;
+        background-color: rgba(220, 53, 69, 0.1);
+        border-radius: 4px;
+    }
+}
+
+/* Blocks Editor */
+.stepBlocks {
+    padding: var(--spacing-md);
+    background-color: #f8f9fa;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.blockItem {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border-left: 4px solid #dee2e6;
+    transition: border-left-color 0.2s;
+
+    &:hover {
+        border-left-color: var(--primary-color);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+    }
+}
+
+.blockHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 8px;
+    background-color: #f1f3f5;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.blockTypeLabel {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: 600;
+}
+
+.blockControls {
+    display: flex;
+    gap: 4px;
+
+    button {
+        background: none;
+        border: none;
+        padding: 2px;
+        cursor: pointer;
+        color: var(--text-secondary);
+
+        &:hover:not(:disabled) {
+            color: var(--primary-color);
+        }
+
+        &:disabled {
+            opacity: 0.3;
+        }
+    }
+}
+
+.deleteBlockButton {
+    &:hover {
+        color: var(--danger-color) !important;
+    }
+}
+
+.blockBody {
+    padding: var(--spacing-sm);
+}
+
+.blockTextarea {
+    width: 100%;
+    min-height: 80px;
+    padding: 8px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
+    resize: vertical;
+}
+
+.blockImageInput {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    input {
+        width: 100%;
+        padding: 6px;
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-sm);
+        font-size: 0.85rem;
+    }
+}
+
+.blockChecklist {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.checklistItem {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    input {
+        flex: 1;
+        padding: 4px;
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-sm);
+        font-size: 0.85rem;
+    }
+
+    button {
+        background: none;
+        border: none;
+        color: var(--text-secondary);
+        cursor: pointer;
+
+        &:hover {
+            color: var(--danger-color);
+        }
+    }
+}
+
+.addCheckItemButton {
+    align-self: flex-start;
+    font-size: 0.75rem;
+    color: var(--primary-color);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px 0;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.addBlockArea {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding-top: var(--spacing-sm);
+    border-top: 1px dashed var(--border-color);
+
+    .addBlockLabel {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+    }
+
+    button {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 0.75rem;
+        padding: 4px 8px;
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-sm);
+        background: white;
+        cursor: pointer;
+
+        &:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+    }
 }
 
 .addStepItem {
@@ -178,19 +397,24 @@
     align-items: center;
     justify-content: center;
     gap: var(--spacing-sm);
-    padding: var(--spacing-sm);
+    padding: var(--spacing-md);
     border: 1px dashed var(--border-color);
     border-radius: var(--radius-sm);
     color: var(--text-secondary);
-    font-size: 0.875rem;
     cursor: pointer;
-    margin-top: var(--spacing-sm);
+    transition: all 0.2s;
+
+    &:hover {
+        border-color: var(--primary-color);
+        color: var(--primary-color);
+        background-color: var(--surface-color);
+    }
 }
 
 /* Form Column */
 .formColumn {
     flex: 1;
-    max-width: 500px;
+    max-width: 400px;
 }
 
 .formGroup {

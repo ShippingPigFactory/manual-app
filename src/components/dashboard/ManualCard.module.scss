@@ -1,6 +1,13 @@
 // src/components/dashboard/ManualCard.module.scss
 @use '@/styles/mixins' as *;
 
+.cardWrapper {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
 .card {
     display: flex;
     flex-direction: column;
@@ -9,12 +16,34 @@
     border-radius: var(--radius-md);
     padding: var(--spacing-md);
     transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-    height: 100%; // Grid内での高さ揃え
+    flex: 1; // Grid内での高さ揃え
+    cursor: pointer;
+    text-decoration: none; // Linkタグのスタイルリセット
 
     &:hover {
         transform: translateY(-2px);
         box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         border-color: var(--primary-color);
+    }
+}
+
+.resumeButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background-color 0.2s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    &:hover {
+        background-color: var(--primary-hover);
+        text-decoration: none;
     }
 }
 

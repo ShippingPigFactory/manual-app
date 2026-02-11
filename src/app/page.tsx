@@ -1,7 +1,6 @@
 'use client';
 
 import { useAppStore } from '@/lib/store';
-import { mockManuals } from '@/data/mockData';
 import ManualCard from '@/components/dashboard/ManualCard';
 import SearchBar from '@/components/search/SearchBar';
 import styles from './page.module.scss';
@@ -15,10 +14,11 @@ const RECOMMENDED_TAGS = ['入社手続き', 'Wifi接続', 'Slack設定', '経�
 
 export default function Home() {
   const router = useRouter();
-  const { progress, initProgress } = useAppStore(
+  const { progress, initProgress, manuals } = useAppStore(
     useShallow((state) => ({
       progress: state.progress,
       initProgress: state.initProgress,
+      manuals: state.manuals,
     }))
   );
 
@@ -29,8 +29,8 @@ export default function Home() {
   useEffect(() => {
     setMounted(true);
     // 全マニュアルの進捗データを初期化しておく（必要であれば）
-    mockManuals.forEach(m => initProgress(m.id));
-  }, [initProgress]);
+    manuals.forEach(m => initProgress(m.id));
+  }, [initProgress, manuals]);
 
   const handleCreateSearch = (results: Manual[]) => {
     // ヒーロー検索での挙動：結果があれば詳細へ...というよりは
@@ -82,7 +82,7 @@ export default function Home() {
       <section>
         <h2 className={styles.sectionTitle}>すべてのマニュアル</h2>
         <div className={styles.grid}>
-          {mockManuals.map((manual) => (
+          {(mounted ? manuals : []).map((manual) => (
             <ManualCard
               key={manual.id}
               manual={manual}

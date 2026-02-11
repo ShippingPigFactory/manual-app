@@ -1,0 +1,26 @@
+@use '@/styles/mixins' as *;
+
+.textBlock {
+    margin-bottom: var(--spacing-lg);
+    line-height: 1.8;
+    font-size: 1.125rem;
+
+    // Decoration for better visibility
+    padding: var(--spacing-sm) var(--spacing-md);
+    background-color: rgba(248, 249, 250, 0.5); // Very subtle grey
+    border-left: 5px solid var(--primary-color);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+
+    strong {
+        font-weight: 700;
+        color: var(--primary-color);
+    }
+}
+
+.imageBlock {
+    margin-bottom: var(--spacing-lg);
+}
+
+.checklistBlock {
+    margin-bottom: var(--spacing-lg);
+}

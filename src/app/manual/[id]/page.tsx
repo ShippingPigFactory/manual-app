@@ -3,13 +3,12 @@
 import { use, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAppStore } from '@/lib/store';
-import { mockManuals, mockSteps } from '@/data/mockData';
 import styles from './page.module.scss';
-import Checklist from '@/components/manual/Checklist';
-import MediaViewer from '@/components/manual/MediaViewer';
+import BlockRenderer from '@/components/manual/BlockRenderer';
 import { ChevronLeft, ChevronRight, CheckCircle } from 'lucide-react';
 import clsx from 'clsx';
 import { useShallow } from 'zustand/react/shallow';
+import { ChecklistBlock } from '@/lib/types';
 
 // Next.js 15/16 App Router: params is a Promise
 export default function ManualWizardPage({ params }: { params: Promise<{ id: string }> }) {
@@ -17,21 +16,24 @@ export default function ManualWizardPage({ params }: { params: Promise<{ id: str
     const router = useRouter();
     const { id } = unwrappedParams;
 
-    const { progress, initProgress, updateCurrentStep, markStepCompleted, completeManual } = useAppStore(
+    const { progress, initProgress, updateCurrentStep, markStepCompleted, completeManual, resetManual, manuals, stepsMap } = useAppStore(
         useShallow((state) => ({
             progress: state.progress,
             initProgress: state.initProgress,
             updateCurrentStep: state.updateCurrentStep,
             markStepCompleted: state.markStepCompleted,
             completeManual: state.completeManual,
+            resetManual: state.resetManual,
+            manuals: state.manuals,
+            stepsMap: state.steps,
         }))
     );
 
     const [mounted, setMounted] = useState(false);
     const [checkedItems, setCheckedItems] = useState<string[]>([]); // Current step's checked items
 
-    const manual = mockManuals.find((m) => m.id === id);
-    const steps = mockSteps[id] || [];
+    const manual = manuals.find((m) => m.id === id);
+    const steps = stepsMap[id] || [];
 
     useEffect(() => {
         setMounted(true);
@@ -58,18 +60,16 @@ export default function ManualWizardPage({ params }: { params: Promise<{ id: str
     // Actually, let's keep it simple: Reset checks when step changes.)
 
     useEffect(() => {
-        // Reset checks when step changes, OR restore if we track them.
-        // Since we don't track individual checkbox state in store (only step completion),
-        // we will clear them.
+        // Reset checks when step changes
         setCheckedItems([]);
 
         // If step is already marked as completed in history, maybe pre-fill?
         if (userProgress?.completedStepIds.includes(currentStep?.id)) {
-            // Fill all required items?
-            // For simplicity, let's just leave them unchecked or fill all.
-            // Let's fill all to be kind.
-            if (currentStep) {
-                setCheckedItems(currentStep.checklist.map(c => c.id));
+            if (currentStep && currentStep.blocks) {
+                const allChecklistItems = currentStep.blocks
+                    .filter((b): b is ChecklistBlock => b.type === 'checklist')
+                    .flatMap(b => b.items.map(i => i.id));
+                setCheckedItems(allChecklistItems);
             }
         }
     }, [currentStepIndex, currentStep, userProgress?.completedStepIds]);
@@ -84,9 +84,14 @@ export default function ManualWizardPage({ params }: { params: Promise<{ id: str
                 <CheckCircle size={64} className={styles.completedIcon} />
                 <h1 className={styles.completedTitle}>お疲れ様でした！</h1>
                 <p className={styles.completedMessage}>「{manual.title}」を完了しました。</p>
-                <button onClick={() => router.push('/')} className={styles.homeButton}>
-                    ダッシュボードへ戻る
-                </button>
+                <div className={styles.completedActions}>
+                    <button onClick={() => resetManual(id)} className={styles.restartButton}>
+                        最初からやり直す
+                    </button>
+                    <button onClick={() => router.push('/')} className={styles.homeButton}>
+                        ダッシュボードへ戻る
+                    </button>
+                </div>
             </div>
         );
     }
@@ -96,8 +101,19 @@ export default function ManualWizardPage({ params }: { params: Promise<{ id: str
     const isLastStep = currentStepIndex === steps.length - 1;
 
     // Validation
-    const requiredItemIds = currentStep.checklist.filter(i => i.isRequired).map(i => i.id);
-    const allRequiredChecked = requiredItemIds.every(id => checkedItems.includes(id));
+    // Extract all items from all checklist blocks
+    const allChecklistItems = currentStep.blocks
+        ? currentStep.blocks
+            .filter((b): b is ChecklistBlock => b.type === 'checklist')
+            .flatMap(b => b.items)
+        : [];
+
+    // Spec: "All checkboxes must be checked" (ignoring isRequired flag, user wants full check)
+    // Or should we trust isRequired? User said "check the checkbox...". 
+    // Usually "isRequired" implies that. But let's assume ALL items shown are required for now based on request phrasing.
+    // "チェックボックスをチェックしないと...すべてのチェックボックスをチェックで次のStepに"
+    // -> Suggests ALL.
+    const allRequiredChecked = allChecklistItems.every(i => checkedItems.includes(i.id));
     const canProceed = allRequiredChecked;
 
     const handleToggle = (itemId: string, checked: boolean) => {
@@ -131,36 +147,25 @@ export default function ManualWizardPage({ params }: { params: Promise<{ id: str
                 <div className={styles.progressLabel}>
                     Step {currentStepIndex + 1} / {steps.length}
                 </div>
+                <div
+                    className={styles.progressFill}
+                    style={{ width: `${((currentStepIndex) / steps.length) * 100}%` }}
+                />
                 <div className={styles.progressBar}>
-                    <div
-                        className={styles.progressFill}
-                        style={{ width: `${((currentStepIndex) / steps.length) * 100}%` }}
-                    />
                 </div>
             </header>
 
             <main className={styles.main}>
                 <h1 className={styles.stepTitle}>{currentStep.title}</h1>
 
-                {currentStep.media && (
-                    <MediaViewer
-                        url={currentStep.media.url}
-                        type={currentStep.media.type}
-                        caption={currentStep.media.caption}
+                {(currentStep.blocks || []).map(block => (
+                    <BlockRenderer
+                        key={block.id}
+                        block={block}
+                        checkedItems={checkedItems}
+                        onToggle={handleToggle}
                     />
-                )}
-
-                {/* Using dangerouslySetInnerHTML as spec allows content to be HTML string */}
-                <div
-                    className={styles.content}
-                    dangerouslySetInnerHTML={{ __html: currentStep.content }}
-                />
-
-                <Checklist
-                    items={currentStep.checklist}
-                    checkedIds={checkedItems}
-                    onToggle={handleToggle}
-                />
+                ))}
             </main>
 
             <footer className={styles.footer}>

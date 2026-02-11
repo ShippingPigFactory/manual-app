@@ -21,12 +21,18 @@ export default function MediaViewer({ url, type, caption }: Props) {
         );
     }
 
+    const getImageSrc = (src: string) => {
+        if (!src) return '';
+        if (src.startsWith('http') || src.startsWith('/')) return src;
+        return `/${src}`;
+    };
+
     return (
         <div className={styles.container}>
             <div className={styles.imageWrapper}>
                 {/* Next/Image requires width/height or fill. Using unoptimized for external/mock urls simplification. */}
                 <img
-                    src={url}
+                    src={getImageSrc(url)}
                     alt={caption || 'Instruction image'}
                     className={styles.image}
                 />

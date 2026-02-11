@@ -154,6 +154,11 @@
     margin-bottom: var(--spacing-xl);
 }
 
+.completedActions {
+    display: flex;
+    gap: var(--spacing-md);
+}
+
 .homeButton {
     background-color: var(--primary-color);
     color: white;
@@ -163,5 +168,19 @@
 
     &:hover {
         background-color: var(--primary-hover);
+    }
+}
+
+.restartButton {
+    background-color: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+    padding: 12px 24px;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+
+    &:hover {
+        background-color: #f8f9fa;
+        color: var(--text-primary);
     }
 }

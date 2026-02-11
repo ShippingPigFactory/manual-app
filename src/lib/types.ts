@@ -20,6 +20,28 @@ export type ChecklistItem = {
     isRequired: boolean;    // trueの場合、チェックしないと「次へ」ボタンが無効化される
 };
 
+// Block Types
+export type TextBlock = {
+    id: string;
+    type: 'text';
+    content: string; // HTML allowed
+};
+
+export type ImageBlock = {
+    id: string;
+    type: 'image';
+    url: string;
+    caption?: string;
+};
+
+export type ChecklistBlock = {
+    id: string;
+    type: 'checklist';
+    items: ChecklistItem[];
+};
+
+export type Block = TextBlock | ImageBlock | ChecklistBlock;
+
 // 3. Step (各手順)
 // 1ステップにつき1画面を表示します。
 export type Step = {
@@ -27,13 +49,7 @@ export type Step = {
     manualId: string;
     order: number;          // 1, 2, 3... (表示順)
     title: string;          // その画面でやることのタイトル
-    content: string;        // 説明文 (HTML string または Markdown string)
-    media?: {
-        type: 'image' | 'video' | 'youtube';
-        url: string;
-        caption?: string;
-    };
-    checklist: ChecklistItem[];
+    blocks: Block[];        // 自由配置のブロック
 };
 
 // 4. UserProgress (進捗状況)
